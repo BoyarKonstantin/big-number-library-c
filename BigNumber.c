@@ -26,6 +26,16 @@ static void _inc_count_bigint(BigInt *x){
     }
 }
 
+static void _set_count_bigint(BigInt *x, BigInt *y){
+    if(x->size) < y->size{
+        x->size = y->size;
+        x->number = (uint32_t*)realloc(x->number, x->sizeof(uint32_t));
+        memset(x->number + x->count, 0, (x->size - z->count * sizeof(uint32_t)));
+    }
+    if(x->count < y->count){
+        x->count = y->count;
+    }
+};
 extern BigInt *new_bigint(uint8_t *str);
 extern void free_bigint(BigInt *x);
 
@@ -40,11 +50,18 @@ int main(){
     
     add_bigint(x, y);
     print_bigint(x)
-
+    free_bigint(x);
+    free_bigint(y);
     return 0;
 }
 
+extern void add_bigint(BigInt *x, BigInt *y){
+    _set_count_bigint(x, y);
+    uint8_t carry = 0;
+    for(size_t i = 0; i < x->count; ++i){
 
+    }
+}
 extern BigInt *new_bigint(uint8_t *str){
     const size_t BUFFSIZE = 9;
 
@@ -67,5 +84,17 @@ extern BigInt *new_bigint(uint8_t *str){
             bigint->number[next++] = atoi(chunck);
             _inc_count_bigint(bigint)
         }
+        if(index != 0){
+            chunk[index] = '\0';
+            _swap(chunck, index);
+            bigint->number[next++] = atoi(chunk);
+            _inc_count_bigint(bigint);
+        }
     }
+    return bigint;
+}
+
+extern void free_bigint(BigInt *x){
+    free(x->number);
+    free(x);
 }
