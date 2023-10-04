@@ -5,13 +5,6 @@
 
 #define MODULO 1000000000
 
-// // count = 6
-// // size = 6 * 2 = 12 * 2 = 24 ...
-// [ 11, 22, 33, 00, 00, 00 ]
-// 0 - null
-
-// * 2
-// << 1
 
 typedef struct BigInt {
 	uint32_t *number;
