@@ -71,8 +71,8 @@ extern void xchg_bigint(BigInt *x, BigInt *y);
 extern void print_bigint(BigInt *x);
 
 int main(void) {
-	BigInt *x = new_bigint("0");
-	BigInt *y = new_bigint("1");
+	BigInt *x = new_bigint("512512526812759871289457128971289571289571238609238690234869023823882386902389602680");
+	BigInt *y = new_bigint("6789476894367768934768923785091238591236759127127127589127127589127598127589127689127689172896789");
 
 	sub_bigint(x, y);
 	print_bigint(x);
