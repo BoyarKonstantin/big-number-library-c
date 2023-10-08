@@ -69,11 +69,11 @@ extern int8_t cmp_bigint(BigInt *x, BigInt *y);
 extern void xchg_bigint(BigInt *x, BigInt *y);
 
 extern void multiply_bigint(BigInt *x, BigInt *y);
-
+extern void divide_bigint(BigInt *x, BigInt *y);
 extern void print_bigint(BigInt *x);
 
 int main(void) {
-	BigInt *x = new_bigint("2");
+	BigInt *x = new_bigint("4");
 	BigInt *y = new_bigint("4");
 
 	multiply_bigint(x, y);
@@ -121,6 +121,56 @@ extern void print_bigint(BigInt *x) {
 	putchar('\n');
 }
 
+extern void divide_bigint(BigInt *x, BigInt *y){
+	
+    if (cmp_bigint(y, new_bigint("0")) == 0) {
+        printf("Ошибка: Деление на ноль\n");
+        exit(1); 
+    }
+
+    BigInt *result = new_bigint("0");
+
+    BigInt *remainder = new_bigint("0");
+
+    char char_buffer[2]; // Буфер для символа и завершающего нуля
+
+    for (ssize_t i = 0; i < x->count; ++i) {
+        multiply_bigint(remainder, new_bigint("10"));
+
+        // Используем sprintf для конвертации символа в строку
+        sprintf(char_buffer, "%c", x->number[i]);
+
+        add_bigint(remainder, new_bigint(char_buffer));
+
+        BigInt *temp_result = new_bigint("0");
+
+        while (cmp_bigint(remainder, y) >= 0) {
+            sub_bigint(remainder, y);
+            add_bigint(temp_result, new_bigint("1"));
+        }
+
+        if (temp_result->count > 0) {
+            temp_result->number[temp_result->count] = 0;
+            _inc_count_bigint(temp_result);
+        }
+        add_bigint(result, temp_result);
+        free_bigint(temp_result);
+    }
+
+    // Освобождаем память только для result и remainder
+    free_bigint(result);
+    free_bigint(remainder);
+
+    // Не освобождаем память для x, создаем новый объект BigInt для x
+    BigInt *new_x = new_bigint("0");
+    new_x->number = x->number;
+    new_x->count = x->count;
+    new_x->size = x->size;
+    
+    // Передаем указатель на новый объект вместо освобожденного x
+    x = new_x;
+}
+
 extern void multiply_bigint(BigInt *x, BigInt *y){
     BigInt *result = new_bigint("0");
 
@@ -148,13 +198,11 @@ extern void multiply_bigint(BigInt *x, BigInt *y){
         free_bigint(temp);
     }
 
-    // Очистите старое значение x и скопируйте результат в x
     free_bigint(x);
     x->number = result->number;
     x->count = result->count;
     x->size = result->size;
 
-    // Очистите временный BigInt
     free(result);
 }
 
