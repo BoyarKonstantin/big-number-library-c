@@ -124,7 +124,7 @@ extern void print_bigint(BigInt *x) {
 extern void divide_bigint(BigInt *x, BigInt *y){
 	
     if (cmp_bigint(y, new_bigint("0")) == 0) {
-        printf("Ошибка: Деление на ноль\n");
+        printf("Error: Dividing by zero\n");
         exit(1); 
     }
 
@@ -132,12 +132,12 @@ extern void divide_bigint(BigInt *x, BigInt *y){
 
     BigInt *remainder = new_bigint("0");
 
-    char char_buffer[2]; // Буфер для символа и завершающего нуля
+    char char_buffer[2]; 
 
     for (ssize_t i = 0; i < x->count; ++i) {
         multiply_bigint(remainder, new_bigint("10"));
 
-        // Используем sprintf для конвертации символа в строку
+       
         sprintf(char_buffer, "%c", x->number[i]);
 
         add_bigint(remainder, new_bigint(char_buffer));
@@ -157,17 +157,17 @@ extern void divide_bigint(BigInt *x, BigInt *y){
         free_bigint(temp_result);
     }
 
-    // Освобождаем память только для result и remainder
+   
     free_bigint(result);
     free_bigint(remainder);
 
-    // Не освобождаем память для x, создаем новый объект BigInt для x
+   
     BigInt *new_x = new_bigint("0");
     new_x->number = x->number;
     new_x->count = x->count;
     new_x->size = x->size;
     
-    // Передаем указатель на новый объект вместо освобожденного x
+  
     x = new_x;
 }
 
